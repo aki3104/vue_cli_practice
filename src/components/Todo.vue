@@ -18,7 +18,7 @@
         <tr v-for = "(todo, index) in todos" :key = "todo.id">
           <td>{{ index }}</td>
           <td>{{ todo.taskText }}</td>
-          <td></td>
+          <td><button>{{ todo.tsakStetus }}</button></td>
         </tr>
       </tbody>
     </table>
@@ -36,25 +36,29 @@ export default {
   data () {
     return {
       newItem: '',
-      todos: [{
-        taskText: 'task1',
-        taskStatus: '作業中'
-      }, {
-        taskText: 'task2',
-        taskStatus: '作業中'
-      }]
+      todos: []
     }
   },
   methods: {
-    addItem: () => {
-      let addItemInput = {
+    addItem: function () {
+      let item = {
         taskText: this.newItem,
-        tsakSatus: '作業中'
+        tsakStetus: '作業中'
       }
-      this.todos.push(addItemInput)
+      this.todos.push(item)
       this.newItem = ''
     }
   }
+  // methods: {
+  //   addItem: () => {
+  //     let addItemInput = {
+  //       taskText: this.newItem,
+  //       tsakSatus: '作業中'
+  //     }
+  //     this.todos.push(addItemInput)
+  //     this.newItem = ''
+  //   }
+  // }
 }
 
 </script>
@@ -64,17 +68,11 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
+
 table{
-  text-align: center;
+  margin: 30px auto;
 }
-tr {
-  list-style-type: none;
-  padding: 0;
-}
-th {
-  display: inline-block;
-  margin: 0 10px;
-}
+
 a {
   color: #42b983;
 }
