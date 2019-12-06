@@ -12,6 +12,7 @@
           <th>ID</th>
           <th>コメント</th>
           <th>状態</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="todo-list">
@@ -19,6 +20,7 @@
           <td>{{ index }}</td>
           <td>{{ todo.taskText }}</td>
           <td><button>{{ todo.tsakStetus }}</button></td>
+          <td><button @click = "deleteItem(index)">削除</button></td>
         </tr>
       </tbody>
     </table>
@@ -47,18 +49,13 @@ export default {
       }
       this.todos.push(item)
       this.newItem = ''
+    },
+    deleteItem: function (index) {
+      if (confirm('are you sure?')) {
+        this.todos.splice(index, 1)
+      }
     }
   }
-  // methods: {
-  //   addItem: () => {
-  //     let addItemInput = {
-  //       taskText: this.newItem,
-  //       tsakSatus: '作業中'
-  //     }
-  //     this.todos.push(addItemInput)
-  //     this.newItem = ''
-  //   }
-  // }
 }
 
 </script>
