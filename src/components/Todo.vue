@@ -70,6 +70,14 @@ table{
   margin: 30px auto;
 }
 
+th{
+  padding-left: 20px;
+}
+
+td{
+  padding-left: 20px;
+}
+
 a {
   color: #42b983;
 }
