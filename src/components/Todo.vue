@@ -19,7 +19,7 @@
         <tr v-for = "(todo, index) in todos" :key = "todo.id">
           <td>{{ index }}</td>
           <td>{{ todo.taskText }}</td>
-          <td><button>{{ todo.tsakStetus }}</button></td>
+          <td><button @click = "statusItem(index)">{{ todo.taskStetus }}</button></td>
           <td><button @click = "deleteItem(index)">削除</button></td>
         </tr>
       </tbody>
@@ -45,7 +45,7 @@ export default {
     addItem: function () {
       let item = {
         taskText: this.newItem,
-        tsakStetus: '作業中'
+        taskStetus: '作業中'
       }
       this.todos.push(item)
       this.newItem = ''
@@ -54,6 +54,12 @@ export default {
       if (confirm('are you sure?')) {
         this.todos.splice(index, 1)
       }
+    },
+    statusItem: function (index) {
+      this.todos[index].taskStetus =
+      this.todos[index].taskStetus === '作業中'
+        ? '完了'
+        : '作業中'
     }
   }
 }
