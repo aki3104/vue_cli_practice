@@ -2,9 +2,9 @@
   <div class="container">
 
     <div>
-      <input type="radio" name="swich-display" id="radio-all" checked="checked">全て
-      <input type="radio" name="swich-display" id="radio-doing">作業中
-      <input type="radio" name="swich-display" id="radio-complete">完了
+      <input type="radio" name="swich-display" id="radio-all" checked="checked" @checked = "radioAll">全て
+      <input type="radio" name="swich-display" id="radio-doing" @checked = "radioDoing" >作業中
+      <input type="radio" name="swich-display" id="radio-complete" @checked = "radioDone">完了
     </div>
     <table>
       <thead>
@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody id="todo-list">
-        <tr v-for = "(todo, index) in todos" :key = "todo.id">
+        <tr v-for = "(todo, index) in filteredTodos" :key = "todo.id">
           <td>{{ index }}</td>
           <td>{{ todo.taskText }}</td>
           <td><button @click = "statusItem(index)">{{ todo.taskStetus }}</button></td>
@@ -37,15 +37,22 @@ export default {
   name: 'Todos',
   data () {
     return {
+      TYPE: {
+        ALL: '全て',
+        DOING: '作業中',
+        DONE: '完了'
+      },
       newItem: '',
-      todos: []
+      todos: [],
+      filteredTodos: []
     }
   },
+
   methods: {
     addItem: function () {
       let item = {
         taskText: this.newItem,
-        taskStetus: '作業中'
+        taskStetus: this.TYPE.DOING
       }
       this.todos.push(item)
       this.newItem = ''
@@ -57,10 +64,24 @@ export default {
     },
     statusItem: function (index) {
       this.todos[index].taskStetus =
-      this.todos[index].taskStetus === '作業中'
-        ? '完了'
-        : '作業中'
+      this.todos[index].taskStetus === this.TYPE.DOING
+        ? this.TYPE.DONE
+        : this.TYPE.DOING
+    },
+    radioDoing: function () {
+      this.filteredTodos = this.todos.filter(function (todo) {
+        return todo.taskStetus === '作業中'
+      })
+    },
+    radioDone: function () {
+      this.filteredTodos = this.todos.filter(function (todo) {
+        return todo.taskStetus === '完了'
+      })
+    },
+    radioAll: function () {
+      this.filteredTodos = this.todos
     }
+
   }
 }
 
