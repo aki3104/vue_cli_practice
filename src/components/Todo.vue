@@ -2,9 +2,9 @@
   <div class="container">
 
     <div>
-      <input type="radio" name="swich-display" id="radio-all" checked="checked" @checked = "radioAll">全て
-      <input type="radio" name="swich-display" id="radio-doing" @checked = "radioDoing" >作業中
-      <input type="radio" name="swich-display" id="radio-complete" @checked = "radioDone">完了
+      <input type="radio" name="swich-display" id="radio-all" checked="checked" @change = "radioAll">全て
+      <input type="radio" name="swich-display" id="radio-doing" @change = "radioDoing" >作業中
+      <input type="radio" name="swich-display" id="radio-complete" @change = "radioDone">完了
     </div>
     <table>
       <thead>
