@@ -17,7 +17,7 @@
         <li>{{ todo.status }}</li>
       </ul>
     </div>
-  <router-link to="/Todo">TodoList</router-link>
+  <router-link to="/">TodoList</router-link>
   </div>
 
 </template>
