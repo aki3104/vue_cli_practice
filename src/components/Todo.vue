@@ -2,9 +2,9 @@
   <div class="container">
 
     <div>
-      <input type="radio" name="swich-display" id="radio-all" checked="checked" @change = "radioAll">全て
-      <input type="radio" name="swich-display" id="radio-doing" @change = "radioDoing" >作業中
-      <input type="radio" name="swich-display" id="radio-complete" @change = "radioDone">完了
+      <input type="radio" name="swich-display" id="radio-all" checked="checked" value = 'すべて' v-model = "radioCheck">全て
+      <input type="radio" name="swich-display" id="radio-doing" value = '作業中' v-model = "radioCheck" >作業中
+      <input type="radio" name="swich-display" id="radio-complete" value = '完了' v-model = "radioCheck">完了
     </div>
     <table>
       <thead>
@@ -24,11 +24,12 @@
         </tr>
       </tbody>
     </table>
+    <p>{{ radioCheck }}</p>
     <form @submit.prevent = 'addItem'>
       <input type='text' v-model = 'newItem'>
       <input type='submit' value='追加'>
     </form>
-
+  <!-- <router-link to="/TodoCopy">vueテスト</router-link> -->
   </div>
 </template>
 
@@ -44,10 +45,9 @@ export default {
       },
       newItem: '',
       todos: [],
-      filteredTodos: []
+      radioCheck: 'すべて'
     }
   },
-
   methods: {
     addItem: function () {
       let item = {
@@ -56,6 +56,7 @@ export default {
       }
       this.todos.push(item)
       this.newItem = ''
+      // console.log(this.radioCheck)
     },
     deleteItem: function (index) {
       if (confirm('are you sure?')) {
@@ -67,24 +68,21 @@ export default {
       this.todos[index].taskStetus === this.TYPE.DOING
         ? this.TYPE.DONE
         : this.TYPE.DOING
-    },
-    radioDoing: function () {
-      this.filteredTodos = this.todos.filter(function (todo) {
-        return todo.taskStetus === '作業中'
-      })
-    },
-    radioDone: function () {
-      this.filteredTodos = this.todos.filter(function (todo) {
-        return todo.taskStetus === '完了'
-      })
-    },
-    radioAll: function () {
-      this.filteredTodos = this.todos
     }
-
+  },
+  computed: {
+    filteredTodos: function () {
+      if (this.radioCheck === 'すべて') {
+        return this.todos.slice()
+      } else {
+        return this.todos.filter(function (todo) {
+          return todo.status === this.radioCheck
+        })
+      }
+    }
   }
-}
 
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
