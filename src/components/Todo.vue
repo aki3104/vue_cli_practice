@@ -6,7 +6,10 @@
       <input type="radio" name="swich-display" id="radio-doing" value = '作業中' v-model = "radioCheck" >作業中
       <input type="radio" name="swich-display" id="radio-complete" value = '完了' v-model = "radioCheck">完了
     </div>
-
+    <form @submit.prevent = 'addItem'>
+      <input class = inputText type='text' v-model = 'newItem'>
+      <input type='submit' value='追加'>
+    </form>
     <table>
       <thead>
         <tr>
@@ -16,20 +19,16 @@
           <th></th>
         </tr>
       </thead>
-      <tbody id="todo-list">
+      <transition-group tag="tbody">
         <!-- フィルター後の中身を表示させる -->
         <tr v-for = "(todo, index) in filteredTodos" :key = "todo.id">
           <td>{{ index }}</td>
           <td>{{ todo.taskText }}</td>
           <td><button @click = "statusItem(index)">{{ todo.taskStetus }}</button></td>
-          <td><button @click = "deleteItem(index)">削除</button></td>
+          <td><button class="deleteBtn" @click = "deleteItem(index)">削除</button></td>
         </tr>
-      </tbody>
+      </transition-group>
     </table>
-    <form @submit.prevent = 'addItem'>
-      <input type='text' v-model = 'newItem'>
-      <input type='submit' value='追加'>
-    </form>
 <!-- 遷移 -->
   <!-- <router-link to="/TodoCopy">vueテスト</router-link> -->
   </div>
@@ -47,6 +46,7 @@ export default {
       },
       newItem: '',
       todos: [],
+      id: 0,
       radioCheck: 'すべて'
     }
   },
@@ -60,7 +60,8 @@ export default {
     // なし
     // ----------------------------------------
     addItem: function () {
-      let item = {
+      const item = {
+        id: this.id++,
         taskText: this.newItem,
         taskStetus: this.TYPE.DOING
       }
@@ -120,23 +121,60 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 table{
+  text-align: center;
   margin: 30px auto;
+  justify-content: center;
 }
 
-th{
-  padding-left: 20px;
+table th{
+  padding: 12px;
+  border-bottom: 2px solid darkgray;
 }
 
-td{
-  padding-left: 20px;
+table td{
+  padding: 12px;
 }
 
-a {
-  color: #42b983;
+table tr:nth-of-type(odd){
+  background-color: rgba(0,0,255,0.1);
 }
+
+button{
+  width: 100%;
+  height: 30px;
+  border-radius: 25px;
+}
+
+.deleteBtn{
+  background-color: #e8334a;
+  color: #fff;
+}
+
+form{
+  margin: 20px 0;
+}
+
+.inputText{
+  height: 20px;
+  border-radius: 3px;
+  box-shadow: 0px 1px rgba(255, 255, 255, 0.5);
+}
+
+.v-enter-active, .v-leave-active{
+  transition: 0.5s
+}
+
+.v-enter, .v-leave-to{
+  opacity: 0;
+  transform: translate(50px)
+}
+
 </style>
