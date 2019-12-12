@@ -24,13 +24,13 @@
         <tr v-for = "(todo, index) in filteredTodos" :key = "todo.id">
           <td>{{ index }}</td>
           <td>{{ todo.taskText }}</td>
-          <td><button @click = "statusItem(index)">{{ todo.taskStetus }}</button></td>
+          <td><button @click = "statusItem(index)">{{ todo.taskStatus }}</button></td>
           <td><button class="deleteBtn" @click = "deleteItem(index)">削除</button></td>
         </tr>
       </transition-group>
     </table>
 <!-- 遷移 -->
-  <!-- <router-link to="/TodoCopy">vueテスト</router-link> -->
+  <router-link to="/TodoCopy">vueテスト</router-link>
   </div>
 </template>
 
@@ -39,39 +39,27 @@ export default {
   name: 'Todos',
   data () {
     return {
-      TYPE: {
-        ALL: '全て',
-        DOING: '作業中',
-        DONE: '完了'
-      },
       newItem: '',
-      todos: [],
-      id: 0,
       radioCheck: 'すべて'
     }
   },
   methods: {
     // ----------------------------------------
     // addItem
-    // タスクをtodosに追加するメソッド
+    // タスクをtodosに追加するメソッド,store.jsにmutationsに接続
     // [引数]
     // なし
     // [戻り値]
     // なし
     // ----------------------------------------
     addItem: function () {
-      const item = {
-        id: this.id++,
-        taskText: this.newItem,
-        taskStetus: this.TYPE.DOING
-      }
-      this.todos.push(item)
+      this.$store.commit('add', this.newItem)
       this.newItem = ''
     },
 
     // ----------------------------------------
     // deleteItem
-    // タスクを削除するメソッド
+    // タスクを削除するメソッド、store.jsにmutationsに接続
     // [引数]
     // index:選択されたタスクのインデックス
     // [戻り値]
@@ -79,25 +67,34 @@ export default {
     // ----------------------------------------
     deleteItem: function (index) {
       if (confirm('are you sure?')) {
-        this.todos.splice(index, 1)
+        this.$store.commit('delete', index)
       }
     },
     // ----------------------------------------
     // statusItem
     // ステータスボタンをクリックしたら、ステータスを切り替えるメソッド
+    // store.jsにmutationsに接続
     // [引数]
     // index:選択されたタスクのインデックス
     // [戻り値]
     // なし
     // ----------------------------------------
     statusItem: function (index) {
-      this.todos[index].taskStetus =
-      this.todos[index].taskStetus === this.TYPE.DOING
-        ? this.TYPE.DONE
-        : this.TYPE.DOING
+      this.$store.commit('status', index)
     }
   },
   computed: {
+    // ----------------------------------------
+    // todos
+    // store.jsのstateにあるtodoに接続
+    // [引数]
+    // なし
+    // [戻り値]
+    // store.jsのstateにあるtodo
+    // ----------------------------------------
+    todos () {
+      return this.$store.state.todos
+    },
     // ----------------------------------------
     // filteredTodos
     // ラジオボタンに応じて、filteredTodosに格納
@@ -107,11 +104,12 @@ export default {
     // 選択されたtodo
     // ----------------------------------------
     filteredTodos () {
+      // return this.$store.state.filterTodos
       if (this.radioCheck === 'すべて') {
-        return this.todos.slice()
+        return this.$store.state.todos.slice()
       } else {
-        return this.todos.filter((todo) => {
-          return todo.taskStetus === this.radioCheck
+        return this.$store.state.todos.filter((todo) => {
+          return todo.taskStatus === this.radioCheck
         })
       }
     }
