@@ -39,8 +39,7 @@ export default {
   name: 'Todos',
   data () {
     return {
-      newItem: '',
-      radioCheck: 'すべて'
+      newItem: ''
     }
   },
   methods: {
@@ -53,10 +52,9 @@ export default {
     // なし
     // ----------------------------------------
     addItem: function () {
-      this.$store.commit('add', this.newItem)
+      this.$store.commit('addTodo', this.newItem)
       this.newItem = ''
     },
-
     // ----------------------------------------
     // deleteItem
     // タスクを削除するメソッド、store.jsにmutationsに接続
@@ -67,7 +65,7 @@ export default {
     // ----------------------------------------
     deleteItem: function (index) {
       if (confirm('are you sure?')) {
-        this.$store.commit('delete', index)
+        this.$store.commit('deleteTodo', index)
       }
     },
     // ----------------------------------------
@@ -80,38 +78,36 @@ export default {
     // なし
     // ----------------------------------------
     statusItem: function (index) {
-      this.$store.commit('status', index)
+      this.$store.commit('statusTodo', index)
     }
   },
   computed: {
     // ----------------------------------------
-    // todos
-    // store.jsのstateにあるtodoに接続
+    // radioCheck
+    // v-modelの記述してあるものをsetでvuexに渡し、getで取得している。
     // [引数]
-    // なし
+    // 選択されているラジオボタン内容。valueRadio
     // [戻り値]
-    // store.jsのstateにあるtodo
+    // storeにあるradioCheck
     // ----------------------------------------
-    todos () {
-      return this.$store.state.todos
+    radioCheck: {
+      get () {
+        return this.$store.state.radioCheck
+      },
+      set (valueRadio) {
+        this.$store.commit('setradioCheck', valueRadio)
+      }
     },
     // ----------------------------------------
     // filteredTodos
-    // ラジオボタンに応じて、filteredTodosに格納
+    // store.jsstateにあるtodoに接続
     // [引数]
     // なし
     // [戻り値]
-    // 選択されたtodo
+    // なし
     // ----------------------------------------
     filteredTodos () {
-      // return this.$store.state.filterTodos
-      if (this.radioCheck === 'すべて') {
-        return this.$store.state.todos.slice()
-      } else {
-        return this.$store.state.todos.filter((todo) => {
-          return todo.taskStatus === this.radioCheck
-        })
-      }
+      return this.$store.getters.filteredTodos
     }
   }
 }

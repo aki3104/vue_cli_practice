@@ -1,39 +1,51 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import todoType from '@/lib/definitions'
 
+// console.log(todoType.TYPE.DONE)
 Vue.use(Vuex)
-
 export default new Vuex.Store({
   state: {
     todos: [],
-    TYPE: {
-      ALL: 'すべて',
-      DOING: '作業中',
-      DONE: '完了'
-    },
+    radioCheck: todoType.TYPE.ALL,
     id: 0
   },
   mutations: {
   // newItemをステートのtodoに入れる
-    add (state, newItem) {
+    addTodo (state, newItem) {
       state.todos.push({
         id: state.id++,
         taskText: newItem,
-        taskStatus: state.TYPE.DOING
+        taskStatus: todoType.TYPE.DOING
       })
     },
     // indexのタスクをデリートする
-    delete (state, index) {
+    deleteTodo (state, index) {
       state.todos.splice(index, 1)
     },
     // statusを変更する。
-    status (state, index) {
+    statusTodo (state, index) {
       state.todos[index].taskStatus =
-      state.todos[index].taskStatus === state.TYPE.DOING
-        ? state.TYPE.DONE
-        : state.TYPE.DOING
+      state.todos[index].taskStatus === todoType.TYPE.DOING
+        ? todoType.TYPE.DONE
+        : todoType.TYPE.DOING
+    },
+    setradioCheck (state, valueRadio) {
+      state.radioCheck = valueRadio
     }
   },
   actions: {
+  },
+
+  getters: {
+    filteredTodos (state) {
+      if (state.radioCheck === todoType.TYPE.ALL) {
+        return state.todos.slice()
+      } else {
+        return state.todos.filter((todo) => {
+          return todo.taskStatus === state.radioCheck
+        })
+      }
+    }
   }
 })
